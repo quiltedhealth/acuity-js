@@ -9,6 +9,7 @@ import { version } from "../package";
 const DEFAULTS = {
   base: "https://acuityscheduling.com",
   agent: "AcuityScheduling-js/" + version,
+  isEnterprise: false,
 };
 
 class AcuityScheduling {
@@ -17,7 +18,7 @@ class AcuityScheduling {
     this.apiKey = config.apiKey;
     this.userId = config.userId;
     this.agent = config.agent || DEFAULTS.agent;
-
+    this.isEnterprise = config.isEnterprise || DEFAULTS.isEnterprise;
     return this;
   }
   async _request(path, options = {}, cb) {
@@ -26,8 +27,13 @@ class AcuityScheduling {
     }
 
     path = typeof path === "string" ? path : "";
+    const publicApiBase = "/api/v1";
+    const enterpriseApiBase = `/api/enterprise/v1/users/${this.userId}`;
+
+    const baseApi = this.isEnterprise ? enterpriseApiBase : publicApiBase;
+
     const config = {
-      url: this.base + "/api/v1" + (path.charAt(0) === "/" ? "" : "/") + path,
+      url: this.base + baseApi + (path.charAt(0) === "/" ? "" : "/") + path,
       json: true,
     };
 

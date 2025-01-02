@@ -1,4 +1,4 @@
-import { createHmac } from "crypto";
+import { createHmac } from "crypto-browserify";
 
 import AcuityScheduling from "./AcuityScheduling";
 import AcuitySchedulingOAuth from "./AcuitySchedulingOAuth";

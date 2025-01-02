@@ -2,10 +2,11 @@
  * AcuitySchedulingOAuth Class
  */
 
+import { stringify } from "./utils";
+
 import axios from "axios";
 
 import AcuityScheduling from "./AcuityScheduling";
-import { stringify } from "./utils";
 
 class AcuitySchedulingOAuth {
   constructor(config = {}) {
