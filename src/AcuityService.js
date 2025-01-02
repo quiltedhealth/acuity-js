@@ -4,7 +4,7 @@ import AcuityScheduling from "./AcuityScheduling";
 import AcuitySchedulingOAuth from "./AcuitySchedulingOAuth";
 import { stringify } from "./utils";
 
-const Acuity = {
+const AcuityService = {
   basic(config) {
     return new AcuityScheduling(config);
   },
@@ -47,7 +47,7 @@ const Acuity = {
     return function (req, _res, buf, _encoding) {
       const body = buf.toString();
       const signature = req.headers["x-acuity-signature"];
-      Acuity.verifyMessageSignature(secret, body, signature);
+      AcuityService.verifyMessageSignature(secret, body, signature);
     };
   },
 
@@ -87,4 +87,4 @@ const Acuity = {
   },
 };
 
-export default Acuity;
+export default AcuityService;

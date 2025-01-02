@@ -1,5 +1,5 @@
-import Acuity from "./Acuity";
+import AcuityService from "./AcuityService";
 import AcuityScheduling from "./AcuityScheduling";
 import AcuitySchedulingOAuth from "./AcuitySchedulingOAuth";
 
-export { Acuity, AcuityScheduling, AcuitySchedulingOAuth };
+export { AcuityService as Acuity, AcuityScheduling, AcuitySchedulingOAuth };
