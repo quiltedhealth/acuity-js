@@ -2,60 +2,68 @@
  * AcuityScheduling Class
  */
 
-var request = require('request');
-var pkg = require('../package');
+import axios from "axios";
 
-function AcuityScheduling (config) {
+import { version } from "../package";
 
-  config = config || {};
+const DEFAULTS = {
+  base: "https://acuityscheduling.com",
+  agent: "AcuityScheduling-js/" + version,
+};
 
-  this.base = config.base || AcuityScheduling.base;
-  this.apiKey = config.apiKey;
-  this.userId = config.userId;
+class AcuityScheduling {
+  constructor(config = {}) {
+    this.base = config.base || DEFAULTS.base;
+    this.apiKey = config.apiKey;
+    this.userId = config.userId;
+    this.agent = config.agent || DEFAULTS.agent;
 
-  return this;
-}
+    return this;
+  }
+  async _request(path, options = {}, cb) {
+    if (!cb) {
+      cb = typeof options === "function" ? options : function () {};
+    }
 
-AcuityScheduling.base = 'https://acuityscheduling.com';
-AcuityScheduling.agent = 'AcuityScheduling-js/' + pkg.version;
+    path = typeof path === "string" ? path : "";
+    const config = {
+      url: this.base + "/api/v1" + (path.charAt(0) === "/" ? "" : "/") + path,
+      json: true,
+    };
 
-AcuityScheduling.prototype._request = function (path, options, cb) {
+    // Set configurable options:
+    if (options.auth) {
+      config.auth = options.auth;
+    }
+    if (options.body) {
+      config.body = options.body;
+    }
+    if (options.method) {
+      config.method = options.method;
+    }
+    if (options.qs) {
+      config.qs = options.qs;
+    }
+    config.headers = options.headers || {};
 
-  options = options || {};
-  if (!cb) {
-    cb = (typeof options === 'function') ? options : function () {};
+    // User agent:
+    config.headers["User-Agent"] = this.agent;
+
+    try {
+      const response = await axios(config);
+      cb(null, response, response.data);
+    } catch (err) {
+      cb(err, err.response, err.response ? err.response.data : null);
+    }
   }
 
-  path = typeof path === 'string' ? path : '';
-  var config = {
-    url: this.base + '/api/v1' + (path.charAt(0) === '/' ? '' : '/') + path,
-    json: true
-  };
+  request(path, options = {}, cb) {
+    options.auth = options.auth || {
+      user: this.userId + "",
+      pass: this.apiKey,
+    };
+    return this._request(path, options, cb);
+  }
+}
 
-  // Set configurable options:
-  if (options.auth)     config.auth     = options.auth;
-  if (options.body)     config.body     = options.body;
-  if (options.method)   config.method   = options.method;
-  if (options.qs)       config.qs       = options.qs;
-  config.headers =      options.headers || {};
-
-  // User agent:
-  config.headers['User-Agent'] = AcuityScheduling.agent;
-
-  return request(config, function (err, response, body) {
-    if (err) return cb(err, response, body);
-    cb(err, response, body);
-  });
-};
-
-AcuityScheduling.prototype.request = function (path, options, cb) {
-  options = options || {};
-  options.auth = options.auth || {
-    user: this.userId + '',
-    pass: this.apiKey
-  };
-  return this._request(path, options, cb);
-};
-
-module.exports = AcuityScheduling;
-
+export default AcuityScheduling;
