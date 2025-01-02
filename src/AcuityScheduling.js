@@ -52,9 +52,6 @@ class AcuityScheduling {
     }
     config.headers = options.headers || {};
 
-    // User agent:
-    config.headers["User-Agent"] = this.agent;
-
     try {
       const response = await axios(config);
       cb(null, response, response.data);
