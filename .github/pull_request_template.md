@@ -16,10 +16,6 @@
 - [ ] 🔁 CI
 - [ ] ⏩ Revert
 
-## Test Plan
-
-<!-- Write a detailed description of how you tested your changes. If applicable, use GIFs, video recordings, and images for support. -->
-
 ## Author Reminders
 
 - [ ] I have added or updated **tests** that cover my code changes.
