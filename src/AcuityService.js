@@ -1,8 +1,6 @@
-import { createHmac } from "crypto-browserify";
-
 import AcuityScheduling from "./AcuityScheduling";
 import AcuitySchedulingOAuth from "./AcuitySchedulingOAuth";
-import { stringify } from "./utils";
+import { signHmacKey, stringify } from "./utils";
 
 const AcuityService = {
   basic(config) {
@@ -27,7 +25,7 @@ const AcuityService = {
     }
 
     // Get hash of message using shared secret:
-    const hasher = createHmac("sha256", secret);
+    const hasher = signHmacKey(secret);
     hasher.update(body.toString());
     const hash = hasher.digest("base64");
 
